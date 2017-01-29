@@ -1,0 +1,60 @@
+/*
+ ============================================================================
+ Name        : project_eiler_20.c
+ Author      : Maksim
+ Version     :
+ Copyright   : 
+ Description : Hello World in C, Ansi-style
+ ASK SASHA как заменить деление на 10 на свдиг?
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <inttypes.h>
+// #include <stdlib.h>
+
+const int MAX_VAL = 30;
+short count = 0;
+
+int int_pow(int base, int exp)
+{
+    int result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+            result *= base;
+        exp >>= 1;
+        base *= base;
+    }
+    return result;
+}
+
+uintmax_t count_fact(int val) {
+	uintmax_t result = 1; 
+	int j;
+
+	printf("count_fact: result %ld, val %d\n", result, val);
+	for(j = 1; j < val; j++) {
+		result *= j;
+		printf("count_fact: result %ld, j %d\n", result, j);
+	}	
+	return result;
+}
+
+int main(void) {
+	int i = 0;
+	int numeral;
+	uintmax_t fact = count_fact(MAX_VAL);
+
+	printf("fact = %ld\n", fact);
+	printf("fact / int_pow(10, i) = %ld\n", fact / int_pow(10, i));
+	printf("(numeral = (fact / int_pow(10, i))) != 0 is %d\n", (numeral = (fact / int_pow(10, i))) != 0);
+
+	while((numeral = (fact / int_pow(10, i))) != 0){
+		count += numeral%10;
+		i++;
+	}
+
+	printf("Summ numerals in number %d! is %d.\n", MAX_VAL, count);
+	return 0;
+}

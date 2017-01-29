@@ -1,0 +1,15 @@
+14:59:13 **** Incremental Build of configuration Debug for project project_eiler_7 ****
+make all 
+Building file: ../src/project_eiler_7.c
+Invoking: Cross GCC Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/project_eiler_7.d" -MT"src/project_eiler_7.d" -o "src/project_eiler_7.o" "../src/project_eiler_7.c"
+Finished building: ../src/project_eiler_7.c
+ 
+Building target: project_eiler_7
+Invoking: Cross GCC Linker
+gcc  -o "project_eiler_7"  ./src/project_eiler_7.o   
+Finished building target: project_eiler_7
+ 
+
+14:59:13 Build Finished (took 117ms)
+

@@ -35,6 +35,7 @@ int int_pow(int base, int exp)
     return result;
 }
 
+// ASK HOW RETURN BOOLEAN VALUE?!
 char is_palindrome (short v1 , short v2) {
 	int i; // ASK for(int i = 0; ...)!
 	int multi = v1 * v2;

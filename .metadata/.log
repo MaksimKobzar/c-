@@ -428,3 +428,9 @@ Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp
 !MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
 !SUBENTRY 1 org.eclipse.ui 2 0 2017-01-29 13:05:18.604
 !MESSAGE Commands should really have a category: plug-in='org.eclipse.linuxtools.systemtap.ui.graphing', id='org.eclipse.linuxtools.systemtap.ui.graphing.commands.SaveGraphImage', categoryId='org.eclipse.linuxtools.systemtap.ui.graphing.category.file'
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-01-29 13:18:38.611
+!MESSAGE Indexed 'project_eiler_7' (1 sources, 37 headers) in 0.95 sec: 1,035 declarations; 1,867 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0.00%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-01-29 14:38:17.033
+!MESSAGE Indexed 'project_eiler_20' (1 sources, 37 headers) in 0.30 sec: 1,035 declarations; 1,867 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0.00%)

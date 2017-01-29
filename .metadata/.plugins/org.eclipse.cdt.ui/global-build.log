@@ -1,3 +1,12 @@
-13:07:29 **** Build of configuration Debug for project eiler_4 ****
+16:18:30 **** Incremental Build of configuration Debug for project project_eiler_20 ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../src/project_eiler_20.c
+Invoking: Cross GCC Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/project_eiler_20.d" -MT"src/project_eiler_20.d" -o "src/project_eiler_20.o" "../src/project_eiler_20.c"
+Finished building: ../src/project_eiler_20.c
+ 
+Building target: project_eiler_20
+Invoking: Cross GCC Linker
+gcc  -o "project_eiler_20"  ./src/project_eiler_20.o   
+Finished building target: project_eiler_20
+ 
