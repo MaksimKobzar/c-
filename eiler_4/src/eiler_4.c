@@ -5,7 +5,8 @@
  Version     :
  Copyright   : 
  Description : Hello World in C, Ansi-style
- 			Ask Sasha about not less than 900 constraint for each opearnds
+ 			Ask Sasha about not less than MIN3_VAL == 900 constraint for each opearnds
+ 			обдумать что можно делать не на степень 10ки а просто потсоняно на 10ки
  ============================================================================
  */
 
@@ -17,8 +18,9 @@
 #define DIMENSION 	6
 #define FOLD 		11
 
-const short max3_val = 999;
-int results[200];
+const short MAX3_VAL = 999;
+const short MIN3_VAL = 900;
+int results[3];
 int result_index;
 
 
@@ -55,35 +57,22 @@ char is_palindrome (short v1 , short v2) {
 }
 
 int main(void) {
-	int i = 0;
-	short op1 = max3_val;
-	// short op1 = max3_val - (max3_val%FOLD);
-	short op2 = max3_val;
+	short op1 = MAX3_VAL - (MAX3_VAL%FOLD);
+	short op2 = MAX3_VAL;
 
-	while ((op1 > 100) || (op2 > 100)) {
-	// while (is_palindrome(op1, op2)) {
-		/*if(op1 == op2) {
-			op1 -= FOLD;
-			op2 = max3_val;
-		}
-		else
-			--op2;*/
-		if(is_palindrome(op1, op2)) {
-			if((op1 > 500 )&& (op2 > 500)) {
-				if(results[0] < op1*op2) {
-					results[0] = op1 * op2;
-					results[1] = op1;
-					results[2] = op2;
-				}
-			}
+	while ((op1 >= MIN3_VAL) && (op2 >= MIN3_VAL)) {
+		if(is_palindrome(op1, op2) && (results[0] < op1*op2)) {
+			results[0] = op1 * op2;
+			results[1] = op1;
+			results[2] = op2;
 		}
 
-		if(op2 == 100) {
-			op2 = max3_val;
+		if(op2 == MIN3_VAL) {
+			op2 = MAX3_VAL;
 			--op1;
 		}
 		else {
-			op2--;
+			--op2;
 		}
 	}
 	printf("Result: %d * %d = %d.\n", results[1], results[2], results[0]);

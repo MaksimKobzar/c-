@@ -1,6 +1,15 @@
-13:07:29 **** Build of configuration Debug for project eiler_4 ****
+20:00:01 **** Incremental Build of configuration Debug for project eiler_4 ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../src/eiler_4.c
+Invoking: GCC C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/eiler_4.d" -MT"src/eiler_4.d" -o "src/eiler_4.o" "../src/eiler_4.c"
+Finished building: ../src/eiler_4.c
+ 
+Building target: eiler_4
+Invoking: GCC C Linker
+gcc  -o "eiler_4"  ./src/eiler_4.o  -lm 
+Finished building target: eiler_4
+ 
 
-13:07:29 Build Finished (took 63ms)
+20:00:02 Build Finished (took 111ms)
 

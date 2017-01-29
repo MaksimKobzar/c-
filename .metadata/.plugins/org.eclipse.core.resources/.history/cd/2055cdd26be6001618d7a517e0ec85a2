@@ -42,7 +42,7 @@ int count_bits(int value) {
 void count_fact(int val) {
 	int carry = 0; 
 	int i, j, z, temp_val;
-	carry[0] = 1;
+
 
 	// перебираю все множители факториала
 	for(z = 1; z < val; z++) {

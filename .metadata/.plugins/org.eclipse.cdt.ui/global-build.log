@@ -1,4 +1,4 @@
-16:18:30 **** Incremental Build of configuration Debug for project project_eiler_20 ****
+00:41:14 **** Incremental Build of configuration Debug for project project_eiler_20 ****
 make all 
 Building file: ../src/project_eiler_20.c
 Invoking: Cross GCC Compiler

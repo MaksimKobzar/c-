@@ -42,7 +42,7 @@ int count_bits(int value) {
 void count_fact(int val) {
 	int carry = 0; 
 	int i, j, z, temp_val;
-	carry[0] = 1;
+
 
 	// перебираю все множители факториала
 	for(z = 1; z < val; z++) {
@@ -51,21 +51,23 @@ void count_fact(int val) {
 		for(i = 0; i < count_bits(temp_val); i++) {
 			// перебираю все значения массива, т.е. arr[0], arr[1], arr[2], arr[3] ....
 			for(j = 0; j < ARRAY_SIZE; j++) {
-				fact_result[j] *= (temp_val + carry) % 10;
+				fact_result[j] *= temp_val % 10;
 				carry = fact_result[j] /= 10 ;
 				// fact_result[j] /= 10;
 			}
 			temp_val /= 10;
 		}
-	}
+
+
+
 }
 
 int main(void) {
-	// int i = 0;
-	// int numeral;
-	count_fact(MAX_VAL);
+	int i = 0;
+	int numeral;
+	uintmax_t fact = count_fact(MAX_VAL);
 
-	printf("factorial = %d%d%d%d%d\n", fact_result[4], fact_result[3], fact_result[2], fact_result[1], fact_result[0]);
+	printf("fact = %ld\n", fact);
 	// printf("fact / int_pow(10, i) = %ld\n", fact / int_pow(10, i));
 	// printf("(numeral = (fact / int_pow(10, i))) != 0 is %d\n", (numeral = (fact / int_pow(10, i))) != 0);
 
