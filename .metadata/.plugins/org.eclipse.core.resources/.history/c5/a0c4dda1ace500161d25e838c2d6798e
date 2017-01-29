@@ -1,0 +1,44 @@
+/*
+ ============================================================================
+ Name        : eiler_4.c
+ Author      : Maksim
+ Version     :
+ Copyright   : 
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+//#include <stdlib.h>
+#include <math.h>
+// ASK libs eat mem space
+
+#define DIMENSION 	6
+#define MAX_3_VAL 	999
+#define FOLD 		11
+
+char is_palindrome (short v1 , short v2) {
+	int i; // ASK for(int i = 0; ...)!
+	short multi = v1 * v2;
+	for (i = 0; i < DIMENSION/2; i++) {
+		if(multi/pow(10, i) != multi/pow(10, i + 3))
+			return 1;
+	}
+	return 0;
+}
+
+int main(void) {
+	short op1, op2;
+
+	while (is_palindrome(op1, op2)) {
+		if(op1 == op2) {
+			op1 -= FOLD;
+			op2 = MAX_3_VAL;
+		}
+		else
+			--op2;
+	}
+
+	printf("Resolved: %d * %d = %d.\n", op1, op2, op1 * op2);
+	return 0;
+}

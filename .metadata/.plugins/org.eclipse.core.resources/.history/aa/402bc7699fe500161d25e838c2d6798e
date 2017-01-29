@@ -1,0 +1,36 @@
+/*
+ ============================================================================
+ Name        : eiler_4.c
+ Author      : Maksim
+ Version     :
+ Copyright   : 
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define DIMENSION 	6
+#define MAX_3_VAL 	999
+#define FOLD 		11
+
+int main(void) {
+	int max_6_value = 999999;
+	int op1, op2;
+
+	for(op1 = op2 = 999; !is_palindrome(op1, op2); ) {
+
+	}
+	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
+	return EXIT_SUCCESS;
+}
+
+char function (short v1 , short v2) {
+	short multi = v1 * v2;
+	for (i = 0; i < DIMENSION/2; i++) {
+		if(multi/(10^i) != multi/(10^(i + 3)))
+			return 0;
+	}
+	return 1;
+}
