@@ -3,7 +3,7 @@
  Name        : eiler_4.c
  Author      : Maksim
  Version     :
- Copyright   : 
+ Copyright   :
  Description : Hello World in C, Ansi-style
  			TODO обдумать что можно делать не на степень 10ки а просто потсоняно на 10ки
  ============================================================================
@@ -12,11 +12,11 @@
 #include <stdio.h>
 
 #define DIMENSION 6
-#define FOLD 	  11
-#define MAX3_VAL  999
-#define MIN3_VAL  900
+#define FOLD 			11
+#define MAX3_VAL 	999
+#define MIN3_VAL 	900
 
-int results[3];
+int pal;
 
 int int_pow(int base, int exp)
 {
@@ -48,10 +48,8 @@ int main(void) {
 	short op2 = MAX3_VAL;
 
 	while ((op1 >= MIN3_VAL) && (op2 >= MIN3_VAL)) {
-		if(is_palindrome(op1, op2) && (results[0] < op1*op2)) {
-			results[0] = op1 * op2;
-			results[1] = op1;
-			results[2] = op2;
+		if(is_palindrome(op1, op2) && (pal < op1*op2)) {
+			pal = op1 * op2;
 		}
 
 		if(op2 == MIN3_VAL) {
@@ -62,6 +60,6 @@ int main(void) {
 			--op2;
 		}
 	}
-	printf("Result: %d * %d = %d.\n", results[1], results[2], results[0]);
+	printf("Result: %d.\n", pal);
 	return 0;
 }
