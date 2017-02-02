@@ -5,24 +5,18 @@
  Version     :
  Copyright   : 
  Description : Hello World in C, Ansi-style
- 			Ask Sasha about not less than MIN3_VAL == 900 constraint for each opearnds
- 			обдумать что можно делать не на степень 10ки а просто потсоняно на 10ки
+ 			TODO обдумать что можно делать не на степень 10ки а просто потсоняно на 10ки
  ============================================================================
  */
 
 #include <stdio.h>
-//#include <stdlib.h>
-//#include <math.h>
-// ASK libs eat mem space
 
-#define DIMENSION 	6
-#define FOLD 		11
+#define DIMENSION 6
+#define FOLD 	  11
+#define MAX3_VAL  999
+#define MIN3_VAL  900
 
-const short MAX3_VAL = 999;
-const short MIN3_VAL = 900;
 int results[3];
-int result_index;
-
 
 int int_pow(int base, int exp)
 {
@@ -37,18 +31,11 @@ int int_pow(int base, int exp)
     return result;
 }
 
-// ASK HOW RETURN BOOLEAN VALUE?!
 char is_palindrome (short v1 , short v2) {
-	int i; // ASK for(int i = 0; ...)!
+	int i;
 	int multi = v1 * v2;
 
-	printf("is_palindrome: %d * %d = %d.\n", v1, v2, v1 * v2);
-
 	for (i = 0; i < DIMENSION/2; i++) {
-		printf("left: %d (%d / %d = %d),  right: %d (%d / %d = %d),  result %d \n",
-			(multi/	int_pow(10, i)) 	% 10, 		multi, 	int_pow(10, i), 		multi/	int_pow(10, i),
-			(multi/	int_pow(10, DIMENSION -1 - i))	% 10, 		multi, 	int_pow(10, DIMENSION - 1 - i), 	multi/	int_pow(10, DIMENSION - 1 - i),
-			(multi/	int_pow(10, i)) 	% 10 != (multi/ int_pow(10, DIMENSION - 1 - i)) %10);
 		if((multi/	int_pow(10, i)) 	% 10 != (multi/ int_pow(10, DIMENSION - 1 - i)) %10) {
 			return 0;
 		}
