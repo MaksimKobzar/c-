@@ -12,7 +12,7 @@ typedef enum {X_SYM, O_SYM, E_SYM} symbol_t;
 symbol_t user_symbol, bot_symbol;
 symbol_t board[DIM][DIM];
 
-void init_board() {
+void init_board(char *board) {
 	int i;
 	for(i = 0; i < DIM*DIM; i++) {
 		*(board + i) = E_SYM;
@@ -39,27 +39,50 @@ void select_symbol() {
 
 }
 
-char is_winner_known() {
+char is_winner_known(char *board) {
+	int i;
+	for(i = 0; i < DIM*DIM; i++) {
+		if( (*(board + i) != E_SYM) && (
+			((*(board + i) == *(board + i + 1) == *(board + i + 2)) 								&& (i%DIM == 0)) || // {0, 1, 2}, {4, 5, 6} ...  
+			((*(board + i) == *(board + i + DIM) == *(board + i + 2*DIM)) 					&& (i < DIM) 	 ) || // {0, 3, 6}, {1, 4, 7} ...
+			((*(board + i) == *(board + i + DIM + 1) == *(board + i + 2*(DIM + 1))) && (i == 0) 	 ) || // {0, 4, 8}
+			((*(board + i) == *(board + i + DIM - 1) == *(board + i + 2*(DIM - 1))) && (i == DIM)  )  	// {2, 4, 6}
+		))
+			return 1;
+	}
+	return 0;
+}
+
+char isdigit(char some) {
+	if(some >= '0' && some <= '9')
+		return 1;
 	return 0;
 }
 
 void user_turn() {
-	int pos, get_row, get_column;
-	char have_coordinates = 0;
-	char user_in[3];
+	int pos, count_coordinates;
+	char valid_coordinates;
+	char user_in[16];
+	int coordinate[2];
 
-	while(!have_coordinates) {
+	while(!valid_coordinates) {
 		printf("Select 2 coordinates: first - row, second - column");
-		scanf(%s, user_in);
-		if((isdigit(user_in[0]) && (user_in[0] < (char)DIM)) 
-			&&
-			(isdigit(user_in[2]) && (user_in[2] < (char)DIM))
-		{
-			get_row = user_in[0];
-			get_column = user_in[2];
-			have_coordinates = 1;
-		}
+		gets(user_in);
 
+		for(pos = 0; pos < 10; pos++) {
+			if(isdigit(user_in[pos]) && (user_in[0] < (char)DIM)) {
+				if(count_coordinates < 2) {
+					coordinate[count_coordinates] = user_in[pos];
+				}
+				count_coordinates++;
+			}
+		}
+		if(count_coordinates == 2) {
+			valid_coordinates = 1;
+		}
+		else {
+			count_coordinates = 0;
+		}
 	}
 }
 
@@ -107,10 +130,10 @@ void print_winner(char bot_is_winner) {
 
 int main() {
 	int i = (user_symbol == X_SYM);
-	init_board();
+	init_board(board);
 	select_symbol();
 
-	while(!is_winner_known()) {
+	while(!is_winner_known(board)) {
 		if(i%2) 	user_turn(); 	// odd
 		else 			bot_turn() 		// even
 		print_board();
