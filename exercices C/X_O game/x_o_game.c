@@ -9,106 +9,166 @@
 
 typedef enum {X_SYM, O_SYM, E_SYM} symbol_t;
 
-symbol_t user_symbol, bot_symbol;
+symbol_t userSymbol, botSymbol;
 symbol_t board[DIM][DIM];
 
-void init_board(char *board) {
+void init_board(char *pBoard) {
 	int i;
 	for(i = 0; i < DIM*DIM; i++) {
-		*(board + i) = E_SYM;
+		*(pBoard + i) = E_SYM;
 	}
 }
 
-void select_symbol() {
-	char user_choice;
-	printf("----------------------------------------------------------------\n");
-	printf(" 				Select what you want to play?  \n");
-	printf(" 				Enter 'X' or 'O'  !  \n");
-	printf(" 				Player with 'X' moves first.  \n");
-	printf(" 				(any character except 'X', will be regarded as 'O')  \n");
-	printf("----------------------------------------------------------------\n");
-	scanf(%s, user_choice);
-	if(user_choice == 'X' || user_choice == 'x') {
-		user_symbol = X_SYM;
-		bot_symbol = O_SYM;
+symbol_t selectSymbol() {
+	char userChoice;
+	printf("----------------------------------------------------------------------\n");
+	printf(" \tSelect what symbol do you want to play?  \n");
+	printf(" \tEnter 'X' or 'O'  ! Player with 'X' moves first.  \n");
+	printf(" \t(any character except 'X', will be regarded as 'O')  \n");
+	printf("----------------------------------------------------------------------\n");
+	scanf("%c", &userChoice);
+	getchar();
+	printf("MY_DBG: userChoice = %c \n", 	userChoice);
+//	printf("MY_DBG: *userChoice = %c \n", 	*userChoice);
+	if(userChoice == 'X' || userChoice == 'x') {
+		userSymbol 	= X_SYM;
+		botSymbol 	= O_SYM;
+		printf("MY_DBG: user X\n");
 	}
 	else {
-		user_symbol = O_SYM;
-		bot_symbol = X_SYM;
+		userSymbol = O_SYM;
+		botSymbol = X_SYM;
+		printf("MY_DBG: user O\n");
 	}
-
+	return userSymbol;
 }
 
-char is_winner_known(char *board) {
+char isWinnerKnown(char *pBoard) {
 	int i;
 	for(i = 0; i < DIM*DIM; i++) {
-		if( (*(board + i) != E_SYM) && (
-			((*(board + i) == *(board + i + 1) == *(board + i + 2)) 								&& (i%DIM == 0)) || // {0, 1, 2}, {4, 5, 6} ...  
-			((*(board + i) == *(board + i + DIM) == *(board + i + 2*DIM)) 					&& (i < DIM) 	 ) || // {0, 3, 6}, {1, 4, 7} ...
-			((*(board + i) == *(board + i + DIM + 1) == *(board + i + 2*(DIM + 1))) && (i == 0) 	 ) || // {0, 4, 8}
-			((*(board + i) == *(board + i + DIM - 1) == *(board + i + 2*(DIM - 1))) && (i == DIM)  )  	// {2, 4, 6}
+		if((*(pBoard + i) != E_SYM) && (
+			((*(pBoard + i) == *(pBoard + i + 1) 				== *(pBoard + i + 2)) 					&& (i%DIM == 0)) || // {0, 1, 2}, {4, 5, 6} ...  
+			((*(pBoard + i) == *(pBoard + i + DIM) 			== *(pBoard + i + 2*DIM)) 			&& (i < DIM) 	 ) || // {0, 3, 6}, {1, 4, 7} ...
+			((*(pBoard + i) == *(pBoard + i + DIM + 1) 	== *(pBoard + i + 2*(DIM + 1))) && (i == 0) 	 ) || // {0, 4, 8}
+			((*(pBoard + i) == *(pBoard + i + DIM - 1) 	== *(pBoard + i + 2*(DIM - 1))) && (i == DIM)  )  	// {2, 4, 6}
 		))
 			return 1;
 	}
 	return 0;
 }
 
-char isdigit(char some) {
-	if(some >= '0' && some <= '9')
+char isDigit(char someSymbol) {
+	if(('0' <= someSymbol) && (someSymbol <= '9')) {
 		return 1;
+	}
 	return 0;
 }
 
-void user_turn() {
-	int pos, count_coordinates;
-	char valid_coordinates;
-	char user_in[16];
-	int coordinate[2];
+void userRound(char *pBoard) {
+	int 	pos, countCoordinates = 0;
+	char 	validCoordinates = 0;
+	char 	userInput[16], c;
+	int 	coordinate[2];
 
-	while(!valid_coordinates) {
-		printf("Select 2 coordinates: first - row, second - column");
-		gets(user_in);
+	while(!validCoordinates) {
+		printf("Select 2 coordinates: first - row, second - column: \n");
+    
+    // while (((c = getchar()) != '\n') || (pos < 16)) {
+    // 	scanf(" %c", &userInput[pos++]);
+    //   c = getchar();
+    // }
 
-		for(pos = 0; pos < 10; pos++) {
-			if(isdigit(user_in[pos]) && (user_in[0] < (char)DIM)) {
-				if(count_coordinates < 2) {
-					coordinate[count_coordinates] = user_in[pos];
+		// scanf("%s", userInput);
+
+    for (pos = 0; pos < sizeof(userInput) && ((c=getchar()) != EOF && c != '\n'); pos++) {
+      userInput[pos++] = c;
+    }
+
+  //   for (; pos >= 0; pos--) {
+		// 	printf("MY_DBG: userInput[%d] = %c \n", pos, userInput[pos]);
+		// 	printf("MY_DBG: (int)userInput[%d] = %d\n", pos, (int)userInput[pos]);
+		// }
+
+		// printf("MY_DBG: DIM %d, (char)DIM %c,  DIM - '0' %c\n", DIM, (char)DIM, DIM - '0');
+		
+		// for(pos = 0; pos < sizeof(userInput); pos++) {
+    for (; pos >= 0; pos--) {
+			
+			printf("MY_DBG: [%d] isDigit %d, userInput[pos] < DIM %d , result %d\n",
+												pos,		isDigit(userInput[pos]) , ((userInput[pos] - '0') < DIM),  (isDigit(userInput[pos]) && ((userInput[pos] - '0') < DIM)));
+			if(isDigit(userInput[pos]) && ((userInput[pos] - '0') < DIM)) {
+				if(countCoordinates < 2) {
+					coordinate[countCoordinates] = userInput[pos] - '0';
 				}
-				count_coordinates++;
+				countCoordinates++;
+				printf("countCoordinates++  \n");
 			}
 		}
-		if(count_coordinates == 2) {
-			valid_coordinates = 1;
+		if(countCoordinates == 2) {
+			validCoordinates = 1;
+			printf("validCoordinates = 1;  \n");
 		}
 		else {
-			count_coordinates = 0;
+			countCoordinates = 0;
 		}
 	}
+
+	*(pBoard + coordinate[1]*DIM + coordinate[0]) = userSymbol;
+	
+	printf("End user round \n");
 }
 
-void bot_turn() {
+void botRound() {
 	int row, column;
 	
 	for(row = 0; row < DIM; row++) {
 		for(column = 0; column < DIM; column++) {
 			if(board[row][column] == E_SYM) {
-				board[row][column] = bot_symbol;
-				return 0;
+				board[row][column] = botSymbol;
+				break;
 			}
 		}
 	}
 }
 
-void print_winner( {
+void drawCell(symbol_t anySymbol) {
 	int row, column;
 	
-	for(row = 0; row < DIM; row++) {
+	for(column = 0; column < DIM; column++) {
+		for(row = 0; row < DIM+2; row++) {
+			if((row == (DIM+2)/2) && (column == DIM/2)) {
+				printf("%c", anySymbol);
+			}
+			else if ((row == 0 || row == DIM+1) && (column != 0)) {
+				printf("|");
+			}
+			else if (column == 0 || column == DIM-1) {
+				printf("_");
+			}
+			else {
+				printf(" ");
+			}
+		}
+		printf("\n");
+	}
+}
+
+void drawBoard() {
+	int row, column;
+	
+	for(row = 0; row < DIM*(DIM + 1) + 1; row++) {
 		for(column = 0; column < DIM; column++) {
+
+			// if((row%(DIM+1) == 0) && (column%(DIM+1) == 0)) {
+			// 	printf
+
+			// }
+
 			switch(board[row][column]) {
 				case(X_SYM) : printf(" X ");
 				break;
 
-				case(X_SYM) : printf(" O ");
+				case(O_SYM) : printf(" O ");
 				break;
 
 				default : 		printf("   ");
@@ -121,24 +181,34 @@ void print_winner( {
 	}
 }
 
-void print_winner(char bot_is_winner) {
-	printf("Winner is %s", bot_is_winner ? "bot." : "user.");
+void printWinner(char botIsWinner) {
+	printf("Winner is %s", botIsWinner ? "bot." : "user.");
 }
 
 
 
 
 int main() {
-	int i = (user_symbol == X_SYM);
-	init_board(board);
-	select_symbol();
+	int rounds;
 
-	while(!is_winner_known(board)) {
-		if(i%2) 	user_turn(); 	// odd
-		else 			bot_turn() 		// even
-		print_board();
-		i++;
-	}		
+	init_board(&board);
 
-	print_winner(i%2);
+	drawCell(X_SYM);
+	printf("\n");
+	drawCell(O_SYM);
+	printf("\n");
+	drawCell(E_SYM);
+	printf("\n");
+	drawCell(X_SYM);
+	// rounds = (selectSymbol() == X_SYM);
+
+	// while(!isWinnerKnown(&board)) {
+	// 	if(rounds%2) 	userRound(&board); 	// odd round
+	// 	else 					botRound(); 	// even round
+	// 	drawBoard();
+	// 	rounds++;
+	// }		
+
+	// printWinner(rounds%2);
+	return 0;
 }
