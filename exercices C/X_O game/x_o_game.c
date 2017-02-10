@@ -131,18 +131,18 @@ void botRound() {
 	}
 }
 
-void drawCell(symbol_t anySymbol) {
+void drawColumn(char boardColumnNum) {
 	int row, column;
-	
-	for(column = 0; column < DIM; column++) {
-		for(row = 0; row < DIM+2; row++) {
-			if((row == (DIM+2)/2) && (column == DIM/2)) {
-				printf("%c", anySymbol);
+	char isFirstColumn = boardColumnNum == 0;
+	for(column = 0; column < DIM + isFirstColumn; column++) {
+		for(row = 0; row < DIM*(3+1) + 1; row++) {
+			if((row == (DIM+2)/2) && (column == (DIM+1)/2)) {
+				printf("%c", board[boardColumnNum][row/DIM] == X_SYM ? 'X' : board[boardColumnNum][row/DIM] == O_SYM ? 'O' : ' ');
 			}
-			else if ((row == 0 || row == DIM+1) && (column != 0)) {
+			else if ((row%(DIM+1) == 0) && ((column != 0) || ((column == 0) && !isFirstColumn))) {
 				printf("|");
 			}
-			else if (column == 0 || column == DIM-1) {
+			else if (((column == 0) && isFirstColumn) || (column == (DIM + isFirstColumn - 1))) {
 				printf("_");
 			}
 			else {
@@ -190,16 +190,18 @@ void printWinner(char botIsWinner) {
 
 int main() {
 	int rounds;
+	int i;
 
 	init_board(&board);
 
-	drawCell(X_SYM);
+	board[0][0] = X_SYM;
+	board[1][2] = X_SYM;
+	board[3][1] = O_SYM;
+	board[3][3] = O_SYM;
+	for(i = 0; i < DIM; i++){
+		drawColumn(i);
+	}
 	printf("\n");
-	drawCell(O_SYM);
-	printf("\n");
-	drawCell(E_SYM);
-	printf("\n");
-	drawCell(X_SYM);
 	// rounds = (selectSymbol() == X_SYM);
 
 	// while(!isWinnerKnown(&board)) {
