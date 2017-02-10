@@ -12,10 +12,10 @@ typedef enum {X_SYM, O_SYM, E_SYM} symbol_t;
 symbol_t userSymbol, botSymbol;
 symbol_t board[DIM][DIM];
 
-void init_board(char *pBoard) {
-	int i;
-	for(i = 0; i < DIM*DIM; i++) {
-		*(pBoard + i) = E_SYM;
+void init_board(symbol_t *pBoard) {
+	int shift;
+	for(shift = 0; shift < DIM*DIM; shift++) {
+		*(pBoard + shift) = E_SYM;
 	}
 }
 
@@ -43,14 +43,14 @@ symbol_t selectSymbol() {
 	return userSymbol;
 }
 
-char isWinnerKnown(char *pBoard) {
-	int i;
-	for(i = 0; i < DIM*DIM; i++) {
-		if((*(pBoard + i) != E_SYM) && (
-			((*(pBoard + i) == *(pBoard + i + 1) 				== *(pBoard + i + 2)) 					&& (i%DIM == 0)) || // {0, 1, 2}, {4, 5, 6} ...  
-			((*(pBoard + i) == *(pBoard + i + DIM) 			== *(pBoard + i + 2*DIM)) 			&& (i < DIM) 	 ) || // {0, 3, 6}, {1, 4, 7} ...
-			((*(pBoard + i) == *(pBoard + i + DIM + 1) 	== *(pBoard + i + 2*(DIM + 1))) && (i == 0) 	 ) || // {0, 4, 8}
-			((*(pBoard + i) == *(pBoard + i + DIM - 1) 	== *(pBoard + i + 2*(DIM - 1))) && (i == DIM)  )  	// {2, 4, 6}
+char isWinnerKnown(symbol_t *pBoard) {
+	int pos;
+	for(pos = 0; pos < DIM*DIM; pos++) {
+		if((*(pBoard + pos) != E_SYM) && (
+			((*(pBoard + pos) == *(pBoard + pos + 1) 				== *(pBoard + pos + 2)) 					&& (pos%DIM == 0)) || // {0, 1, 2}, {4, 5, 6} ...  
+			((*(pBoard + pos) == *(pBoard + pos + DIM) 			== *(pBoard + pos + 2* DIM)) 			&& (pos < DIM) 	 ) || // {0, 3, 6}, {1, 4, 7} ...
+			((*(pBoard + pos) == *(pBoard + pos + DIM + 1) 	== *(pBoard + pos + 2*(DIM + 1))) && (pos == 0) 	 ) || // {0, 4, 8}
+			((*(pBoard + pos) == *(pBoard + pos + DIM - 1) 	== *(pBoard + pos + 2*(DIM - 1))) && (pos == DIM)  )  	// {2, 4, 6}
 		))
 			return 1;
 	}
@@ -68,10 +68,10 @@ void userRound(char *pBoard) {
 	int 	pos, countCoordinates = 0;
 	char 	validCoordinates = 0;
 	char 	userInput[16], c;
-	int 	coordinate[2];
+	int 	coordinate[2]; // 0 - Row 1 - Column
 
 	while(!validCoordinates) {
-		printf("Select 2 coordinates: first - row, second - column: \n");
+		printf("Select 2 coordinates: first - column, second - row: \n");
     
     // while (((c = getchar()) != '\n') || (pos < 16)) {
     // 	scanf(" %c", &userInput[pos++]);
@@ -101,19 +101,13 @@ void userRound(char *pBoard) {
 					coordinate[countCoordinates] = userInput[pos] - '0';
 				}
 				countCoordinates++;
-				printf("countCoordinates++  \n");
 			}
 		}
-		if(countCoordinates == 2) {
-			validCoordinates = 1;
-			printf("validCoordinates = 1;  \n");
-		}
-		else {
-			countCoordinates = 0;
-		}
+		validCoordinates = countCoordinates == 2;
 	}
+	printf("MY_DBG: Get 2 valid coordinates: [%d: %d] \n");
 
-	*(pBoard + coordinate[1]*DIM + coordinate[0]) = userSymbol;
+	board[coordinate[0]][coordinate[1]] = userSymbol;
 	
 	printf("End user round \n");
 }
@@ -121,11 +115,11 @@ void userRound(char *pBoard) {
 void botRound() {
 	int row, column;
 	
-	for(row = 0; row < DIM; row++) {
-		for(column = 0; column < DIM; column++) {
-			if(board[row][column] == E_SYM) {
-				board[row][column] = botSymbol;
-				break;
+	for(column = 0; column < DIM; column++) {
+		for(row = 0; row < DIM; row++) {
+			if(board[column][row] == E_SYM) {
+				board[column][row] = botSymbol;
+				return;
 			}
 		}
 	}
@@ -134,10 +128,23 @@ void botRound() {
 void drawColumn(char boardColumnNum) {
 	int row, column;
 	char isFirstColumn = boardColumnNum == 0;
+
+	if (isFirstColumn) {
+		for(row = 0; row < DIM*(3+1) + 1; row++) {
+			if ((row%(DIM+1)) == 2) {
+				printf("%d",(row - 2)/(DIM+1));
+			}
+			else {
+				printf(" ");
+			}
+		}
+		printf("\n");
+	}
+
 	for(column = 0; column < DIM + isFirstColumn; column++) {
 		for(row = 0; row < DIM*(3+1) + 1; row++) {
-			if((row == (DIM+2)/2) && (column == (DIM+1)/2)) {
-				printf("%c", board[boardColumnNum][row/DIM] == X_SYM ? 'X' : board[boardColumnNum][row/DIM] == O_SYM ? 'O' : ' ');
+			if((row%(DIM+1) == 2) && (column%(DIM + 1) == (1 + isFirstColumn))) {
+				printf("%c", board[boardColumnNum][(row - 2)/(DIM+1)] == X_SYM ? 'X' : board[boardColumnNum][(row - 2)/(DIM+1)] == O_SYM ? 'O' : ' ');
 			}
 			else if ((row%(DIM+1) == 0) && ((column != 0) || ((column == 0) && !isFirstColumn))) {
 				printf("|");
@@ -149,40 +156,22 @@ void drawColumn(char boardColumnNum) {
 				printf(" ");
 			}
 		}
-		printf("\n");
+		if(column%(DIM + 1) == (1 + isFirstColumn)) {
+			printf(" %d ", boardColumnNum);
+		}
+		printf("\n", boardColumnNum);
 	}
 }
 
 void drawBoard() {
-	int row, column;
-	
-	for(row = 0; row < DIM*(DIM + 1) + 1; row++) {
-		for(column = 0; column < DIM; column++) {
-
-			// if((row%(DIM+1) == 0) && (column%(DIM+1) == 0)) {
-			// 	printf
-
-			// }
-
-			switch(board[row][column]) {
-				case(X_SYM) : printf(" X ");
-				break;
-
-				case(O_SYM) : printf(" O ");
-				break;
-
-				default : 		printf("   ");
-			}
-
-			if(column == DIM - 1) {
-				printf("\n");
-			}
-		}
+	int column = 0;
+	while(column < DIM){
+		drawColumn(column++);
 	}
 }
 
 void printWinner(char botIsWinner) {
-	printf("Winner is %s", botIsWinner ? "bot." : "user.");
+	printf("Winner is %s\n", botIsWinner ? "bot." : "user.");
 }
 
 
@@ -190,27 +179,50 @@ void printWinner(char botIsWinner) {
 
 int main() {
 	int rounds;
-	int i;
+	int i, j;
 
 	init_board(&board);
 
-	board[0][0] = X_SYM;
-	board[1][2] = X_SYM;
-	board[3][1] = O_SYM;
-	board[3][3] = O_SYM;
-	for(i = 0; i < DIM; i++){
-		drawColumn(i);
-	}
+	// board[0][0] = X_SYM;
+	// board[1][2] = X_SYM;
+	// board[0][1] = O_SYM;
+	// board[0][2] = O_SYM;
+	// board[2][0] = O_SYM;
+	// board[2][1] = X_SYM;
+	// board[2][2] = O_SYM;
+
+	// for(i = 0; i < DIM; i++) {
+	// 	for(j = 0; j < DIM; j++) {
+	// 		printf(" %c ", board[i][j] == X_SYM ? 'X' : board[i][j] == O_SYM ? 'O' : ' ');
+	// 	}
+	// 	printf("\n");
+	// }
+
+
+
+	// for(i = 0; i < DIM; i++){
+	// 	drawColumn(i);
+	// }
 	printf("\n");
-	// rounds = (selectSymbol() == X_SYM);
+	rounds = (selectSymbol() == X_SYM);
 
-	// while(!isWinnerKnown(&board)) {
-	// 	if(rounds%2) 	userRound(&board); 	// odd round
-	// 	else 					botRound(); 	// even round
-	// 	drawBoard();
-	// 	rounds++;
-	// }		
+	while(!isWinnerKnown(&board)) {
+		if(rounds%2) 	userRound(&board); 	// odd round
+		else 					botRound(); 	// even round
 
-	// printWinner(rounds%2);
+		printf("-----------------------------------------------------\n");
+		for(i = 0; i < DIM; i++) {
+			for(j = 0; j < DIM; j++) {
+				printf(" %c ", board[i][j] == X_SYM ? 'X' : board[i][j] == O_SYM ? 'O' : ('0' + (i*DIM +j)));
+			}
+			printf("\n");
+		}
+		printf("-----------------------------------------------------\n");
+
+		drawBoard();
+		rounds++;
+	}		
+
+	printWinner(rounds%2);
 	return 0;
 }
