@@ -31,17 +31,13 @@ symbol_t selectSymbol() {
 	scanf("%c", &userChoice);
 	while ((c=getchar()) != EOF && c != '\n') {}
 
-	// printf("MY_DBG: userChoice = %c \n", 	userChoice);
-//	printf("MY_DBG: *userChoice = %c \n", 	*userChoice);
 	if(userChoice == 'X' || userChoice == 'x') {
 		userSymbol 	= X_SYM;
 		botSymbol 	= O_SYM;
-		// printf("MY_DBG: user X\n");
 	}
 	else {
 		userSymbol = O_SYM;
 		botSymbol = X_SYM;
-		// printf("MY_DBG: user O\n");
 	}
 	return userSymbol;
 }
@@ -87,11 +83,6 @@ void userRound(char *pBoard) {
     for (pos = 0; pos < sizeof(userInput) && ((c=getchar()) != EOF && c != '\n'); pos++) {
       userInput[pos++] = c;
     }
-
-  //   pos1 = pos;
-  //   for (; pos1 >= 0; pos1--) {
-		// 	printf("MY_DBG: userInput[%d] = %c \n", pos1, userInput[pos1]);
-		// }
 
     for (; pos >= 0; pos--) {
 			if(isDigit(userInput[pos])) {
@@ -214,7 +205,7 @@ int main() {
 
 		while(!isWinnerKnown(&board)) {
 			if(rounds++%2) 	userRound(&board); 	// odd round
-			else 						botRound(); 	// even round
+			else 						botRound(); 				// even round
 			drawBoard();
 		}		
 
