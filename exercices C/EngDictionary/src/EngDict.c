@@ -19,12 +19,12 @@ int numberLetters = 0;
 
 
 //------------------------------- MAIN FUNCTIONS ----------------------------------//
-char isLastPage(char *fileHandler, int handlerOffset) {
+char isLastPage(FILE *fileHandler, int handlerOffset) {
 	int countLines = 0;
 	int symbolIndex = 0;
 
 	while(countLines < PAGE_LINE_NUMBER) {
-		if(*(fileHandler + handlerOffset + symbolIndex++) == EOF) {
+		if(getc(*(fileHandler + handlerOffset + symbolIndex++)) == EOF) {
 			return 1;
 		}
 		else if(*(fileHandler + handlerOffset + symbolIndex++) == '\n') {
@@ -41,12 +41,12 @@ char isLetter(char symbol) {
 	return 0;
 }
 
-int getNumberLetters(char *fileHandler, int handlerOffset) {
+int getNumberLetters(FILE *fileHandler, int handlerOffset) {
 	int numberLetters = 0, countLines = 0, symbolIndex = 0;
 	char symbol = NULL;
 
 	while(countLines < PAGE_LINE_NUMBER) {
-		symbol = *(fileHandler + handlerOffset + symbolIndex++);
+		symbol = getc(*(fileHandler + handlerOffset + symbolIndex++));
 		if(isLetter(symbol)) {
 			numberLetters++;
 		}
@@ -60,13 +60,13 @@ int getNumberLetters(char *fileHandler, int handlerOffset) {
 	return numberLetters;
 }
 
-getPageSize(char *fileHandler, int handlerOffset) {
+getPageSize(FILE *fileHandler, int handlerOffset) {
 	int pageSize = 0, countLines = 0, symbolIndex = 0;
 	char symbol = NULL;
 
 	while(countLines < PAGE_LINE_NUMBER) {
 		pageSize++;
-		symbol = *(fileHandler + handlerOffset + symbolIndex++);
+		symbol = getc(*(fileHandler + handlerOffset + symbolIndex++));
 		if(symbol == '\n') {
 			countLines++;
 		}
@@ -78,8 +78,20 @@ getPageSize(char *fileHandler, int handlerOffset) {
 }
 
 // maybe do it char return to say about copy status
-void copy2Buffer(char *fileHandler, int handlerOffset, char *pageBuffer) {
+void copy2Buffer(FILE *fileHandler, int handlerOffset, char *pageBuffer) {
+	char symbol;
+	int symbolIndex = 0, countLines = 0;
 
+	while(countLines < PAGE_LINE_NUMBER) {
+		symbol = getc(*(fileHandler + handlerOffset + symbolIndex));
+		*(pageBuffer + symbolIndex++) = symbol;
+		if(symbol == '\n') {
+			countLines++;
+		}
+		else if(symbol == EOF) {
+			break;
+		}
+	}
 }
 
 char* getBigPage(char *filename)
@@ -92,30 +104,28 @@ char* getBigPage(char *filename)
   if (fileHandler)
   {		
   	while(foundEOF == 0) {
-  		foundEOF = isLastPage(&fileHandler, handlerOffset);
-  		currNumberLetters = getNumberLetters(&fileHandler, handlerOffset);
+  		foundEOF = isLastPage(fileHandler, handlerOffset);
+  		currNumberLetters = getNumberLetters(fileHandler, handlerOffset);
   		if(numberLetters < currNumberLetters) {
   			// free previous pointer
   			free(pageBuffer);
   			// get size of current page and allocate space in heap for that
-  			pageSize = getPageSize(&fileHandler, handlerOffset);
+  			pageSize = getPageSize(fileHandler, handlerOffset);
   			pageBuffer = (char*) malloc(sizeof(char) * (pageSize + 1));
   			// copy current page to heap
-  			copy2Buffer(&fileHandler, handlerOffset, &pageBuffer);
+  			copy2Buffer(fileHandler, handlerOffset, &pageBuffer);
   			
   			// Save the serial number and letters number of current winner
   			numberLetters = currNumberLetters;
   			numberBigPage = pageIndex;
   		}
-  		pageSize = getPageSize(&fileHandler, handlerOffset);
+  		pageSize = getPageSize(fileHandler, handlerOffset);
   		handlerOffset += pageSize;
   		pageIndex++;
   	}
     fclose(fileHandler);
-  	return(pageBuffer);
   }
-
-    return buffer;
+  return(pageBuffer);
 }
 
 
