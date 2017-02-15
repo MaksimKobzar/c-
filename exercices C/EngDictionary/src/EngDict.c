@@ -83,7 +83,7 @@ void copy2Buffer(FILE *fileHandler, int handlerOffset, char *pageBuffer) {
 	int symbolIndex = 0, countLines = 0;
 
 	while(countLines < PAGE_LINE_NUMBER) {
-		symbol = getc(*(fileHandler + handlerOffset + symbolIndex));
+		symbol = getc(fileHandler);
 		*(pageBuffer + symbolIndex++) = symbol;
 		if(symbol == '\n') {
 			countLines++;
