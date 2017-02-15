@@ -3,7 +3,7 @@
  Name        : mail3.c
  Author      : Maksim
  Version     :
- Copyright   : 
+ Copyright   :
  ============================================================================
  */
 
@@ -12,48 +12,43 @@
  #define FILENAME_COUNT 7
  #define FILENAME_WIDTH 16
 
-char isEqual(int index, char *pFilenameBase) {
-	int 	symbolIndex = 0;
-	FILE 	*goldenHandler = fopen("golden.txt", "r");
-	// char 	testFilename[] = *(pFilenameBase + index);
-	FILE 	*testHandler = fopen(*(pFilenameBase + index), "r");
-	char c1, c2;
+// char isEqual(int index, char *pFilenameBase) {
+// 	FILE 	*goldenHandler 	= fopen("golden.txt", "r");
+// 	FILE 	*testHandler 		= fopen(*(pFilenameBase + index), "r");
+// 	int goldenPiece, testPiece;
 
-	if(testHandler != NULL) {
-		while((c1 = getc(goldenHandler)) == (c2 = getc(testHandler))) {
-			printf("Compare golden: %c, test %c \n", c1, c2);
-		}
-		fclose(goldenHandler);
-		fclose(testHandler);
-		if((c1 == c2) && (c1 == EOF)) {
- 			return 1;
-		}
-	}
-	return 0;
-}
-
+// 	if(testHandler != NULL) {
+// 		while((goldenPiece = fgetc(goldenHandler)) == (testPiece = fgetc(testHandler))) {
+// 			printf("Compare golden: %c, test %c \n", goldenPiece, testPiece);
+// 		}
+// 		fclose(goldenHandler);
+// 		fclose(testHandler);
+// 		if((goldenPiece == testPiece) && (goldenPiece == EOF)) {
+//  			return 1;
+// 		}
+// 	}
+// 	return 0;
+// }
 
 
 int main(void) {
 	char goldenPict[FILENAME_WIDTH] = "golden.txt";
-	char filenameBase[FILENAME_WIDTH][FILENAME_COUNT];
 	int fileIndex;
-	char *pFilenameBase = &filenameBase[];
+	char filenameBase[FILENAME_COUNT][FILENAME_WIDTH] {
+		"pict0.txt", "pict1.txt", "pict2.txt", "pict3.txt", "pict4.txt", "pict5.txt", "pict6.txt"
+	};
+	filenameBase *pFilenameBase;
 
-	*(pFilenameBase + 0) = "pict0.txt";
-	*(pFilenameBase + 1) = "pict1.txt";
-	*(pFilenameBase + 2) = "pict2.txt";
-	*(pFilenameBase + 3) = "pict3.txt";
-	*(pFilenameBase + 4) = "pict4.txt";
-	*(pFilenameBase + 5) = "pict5.txt";
-	*(pFilenameBase + 6) = "pict6.txt";
+	for(index = 0; index < FILENAME_COUNT; index++) {
+		printf("filenameBase[%d] = %s", filenameBase[index]);
+	}
 
 
-	for(fileIndex = 0; fileIndex < FILENAME_COUNT;fileIndex++) {
-		if(isEqual(fileIndex, pFilenameBase)) {
-			printf("golden.txt is equal to picture%c.txt \n");
-			return 0;
-		}
-	}		
+	// for(fileIndex = 0; fileIndex < FILENAME_COUNT;fileIndex++) {
+	// 	if(isEqual(fileIndex, pFilenameBase)) {
+	// 		printf("golden.txt is equal to picture%c.txt \n");
+	// 		return 0;
+	// 	}
+	// }
 	return 1;
 }
