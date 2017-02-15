@@ -8,47 +8,51 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
  #define FILENAME_COUNT 7
- #define FILENAME_WIDTH 16
+ #define FILENAME_WIDTH 20
 
-// char isEqual(int index, char *pFilenameBase) {
-// 	FILE 	*goldenHandler 	= fopen("golden.txt", "r");
-// 	FILE 	*testHandler 		= fopen(*(pFilenameBase + index), "r");
-// 	int goldenPiece, testPiece;
 
-// 	if(testHandler != NULL) {
-// 		while((goldenPiece = fgetc(goldenHandler)) == (testPiece = fgetc(testHandler))) {
-// 			printf("Compare golden: %c, test %c \n", goldenPiece, testPiece);
-// 		}
-// 		fclose(goldenHandler);
-// 		fclose(testHandler);
-// 		if((goldenPiece == testPiece) && (goldenPiece == EOF)) {
-//  			return 1;
-// 		}
-// 	}
-// 	return 0;
-// }
+char goldenPictFilename[FILENAME_WIDTH];
+char filenameBase[FILENAME_COUNT][FILENAME_WIDTH];
 
+char isEqual(int index) {
+	FILE 	*goldenHandler 	= fopen(goldenPictFilename, "r");
+	FILE 	*testHandler 		= fopen(filenameBase[index], "r");
+	int goldenPiece, testPiece;
+	
+	if(testHandler != NULL && goldenHandler != NULL) {
+		while((goldenPiece = fgetc(goldenHandler)) == (testPiece = fgetc(testHandler))) {
+			if((goldenPiece == testPiece) && (goldenPiece == EOF)) {
+				fclose(goldenHandler);
+				fclose(testHandler);
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
 
 int main(void) {
-	char goldenPict[FILENAME_WIDTH] = "golden.txt";
 	int fileIndex;
-	char filenameBase[FILENAME_COUNT][FILENAME_WIDTH] {
-		"pict0.txt", "pict1.txt", "pict2.txt", "pict3.txt", "pict4.txt", "pict5.txt", "pict6.txt"
-	};
-	filenameBase *pFilenameBase;
 
-	for(index = 0; index < FILENAME_COUNT; index++) {
-		printf("filenameBase[%d] = %s", filenameBase[index]);
+	// initialization
+	printf("Enter filename for etalon picture: \n");
+	scanf("%s", goldenPictFilename);
+	for(fileIndex = 0; fileIndex < FILENAME_COUNT; fileIndex++) {
+		printf("Enter filename for test picture %d number: \n", fileIndex);
+		scanf("%s", filenameBase[fileIndex]);
 	}
 
-
-	// for(fileIndex = 0; fileIndex < FILENAME_COUNT;fileIndex++) {
-	// 	if(isEqual(fileIndex, pFilenameBase)) {
-	// 		printf("golden.txt is equal to picture%c.txt \n");
-	// 		return 0;
-	// 	}
-	// }
+	for(fileIndex = 0; fileIndex < FILENAME_COUNT;fileIndex++) {
+		if(isEqual(fileIndex)) {
+			printf("%s is equal to %s. \n", goldenPictFilename, filenameBase[fileIndex]);
+			return 0;
+		}
+		else {
+			printf("%s isnt equal to %s. \n", goldenPictFilename, filenameBase[fileIndex]);
+		}
+	}
 	return 1;
 }
