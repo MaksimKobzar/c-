@@ -77,7 +77,10 @@ char checkSequence(char *someSequence) {
 
 int main() {
 	char result = NULL;
-	char randomSequence[1000] = "[{}<>";
+	char randomSequence[1000];
+
+	printf("Enter sequence:\n");
+	scanf("%s", &randomSequence);
 
 	result = checkSequence(&randomSequence);
 	printf("%s\n", result ? "YES" : "NO");
