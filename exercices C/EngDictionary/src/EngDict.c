@@ -3,37 +3,25 @@
  Name        : EngDict.c
  Author      : Maksim
  Version     :
- Copyright   : 
+ Copyright   :
  ============================================================================
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define PAGE_LINE_NUMBER 50
-
+#define FILENAME_WIDTH 20
+ #define STRING_BUFFER_SIZE 4096
 
 int numberBigPage = 0;
 int numberLetters = 0;
+char dictFilename[FILENAME_WIDTH];
 
 
 
 //------------------------------- MAIN FUNCTIONS ----------------------------------//
-char isLastPage(FILE *fileHandler, int handlerOffset) {
-	int countLines = 0;
-	int symbolIndex = 0;
-
-	while(countLines < PAGE_LINE_NUMBER) {
-		if(getc(*(fileHandler + handlerOffset + symbolIndex++)) == EOF) {
-			return 1;
-		}
-		else if(*(fileHandler + handlerOffset + symbolIndex++) == '\n') {
-			countLines++;		
-		}
-	}
-	return 0;
-}
-
 char isLetter(char symbol) {
 	if('a' <= symbol && symbol <= 'z') {
 		return 1;
@@ -41,119 +29,71 @@ char isLetter(char symbol) {
 	return 0;
 }
 
-int getNumberLetters(FILE *fileHandler, int handlerOffset) {
-	int numberLetters = 0, countLines = 0, symbolIndex = 0;
-	char symbol = NULL;
+int getNumberLetters(char *checkString) {
+	int numberLetters = 0, index = 0;
+	char c = NULL;
 
-	while(countLines < PAGE_LINE_NUMBER) {
-		symbol = getc(*(fileHandler + handlerOffset + symbolIndex++));
-		if(isLetter(symbol)) {
+	while((c = *(checkString + index++)) != "\n") {
+		if(isLetter(c)) {
 			numberLetters++;
-		}
-		else if(symbol == '\n') {
-			countLines++;
-		}
-		else if(symbol == EOF) {
-			break;
 		}
 	}
 	return numberLetters;
 }
 
-getPageSize(FILE *fileHandler, int handlerOffset) {
-	int pageSize = 0, countLines = 0, symbolIndex = 0;
-	char symbol = NULL;
+void getBigestPage() {
+  FILE *fileHandler = fopen(dictFilename, "r");
+  char *stringBuffer = (char*) malloc(sizeof(char) * (STRING_BUFFER_SIZE + 1));
+  char c = NULL;
+	int winner = 0, pageCount = 0,
+			currLettersNumber = 0, maxLettersNumber = 0,
+			stringCount = 0, readedCount = 0;
 
-	while(countLines < PAGE_LINE_NUMBER) {
-		pageSize++;
-		symbol = getc(*(fileHandler + handlerOffset + symbolIndex++));
-		if(symbol == '\n') {
-			countLines++;
-		}
-		else if(symbol == EOF) {
-			break;
-		}
-	}
-	return pageSize;
-}
-
-// maybe do it char return to say about copy status
-void copy2Buffer(FILE *fileHandler, int handlerOffset, char *pageBuffer) {
-	char symbol;
-	int symbolIndex = 0, countLines = 0;
-
-	while(countLines < PAGE_LINE_NUMBER) {
-		symbol = getc(fileHandler);
-		*(pageBuffer + symbolIndex++) = symbol;
-		if(symbol == '\n') {
-			countLines++;
-		}
-		else if(symbol == EOF) {
-			break;
-		}
-	}
-}
-
-char* getBigPage(char *filename)
-{
-  char foundEOF = 0;
-  int pageSize, currNumberLetters, pageIndex = 0, handlerOffset = 0;
-  char *pageBuffer = NULL;
-  FILE *fileHandler = fopen(filename, "r");
-
-  if (fileHandler)
-  {		
-  	while(foundEOF == 0) {
-  		foundEOF = isLastPage(fileHandler, handlerOffset);
-  		currNumberLetters = getNumberLetters(fileHandler, handlerOffset);
-  		if(numberLetters < currNumberLetters) {
-  			// free previous pointer
-  			free(pageBuffer);
-  			// get size of current page and allocate space in heap for that
-  			pageSize = getPageSize(fileHandler, handlerOffset);
-  			pageBuffer = (char*) malloc(sizeof(char) * (pageSize + 1));
-  			// copy current page to heap
-  			copy2Buffer(fileHandler, handlerOffset, &pageBuffer);
-  			
-  			// Save the serial number and letters number of current winner
-  			numberLetters = currNumberLetters;
-  			numberBigPage = pageIndex;
+  if (fileHandler) {
+  	while((readedCount = fgets(stringBuffer, STRING_BUFFER_SIZE, fileHandler)) != NULL) {
+  		if(readedCount != STRING_BUFFER_SIZE) {
+  			stringCount++;
   		}
-  		pageSize = getPageSize(fileHandler, handlerOffset);
-  		handlerOffset += pageSize;
-  		pageIndex++;
+  		currLettersNumber += getNumberLetters(&stringBuffer);
+  		if(currLettersNumber > maxLettersNumber) {
+  			maxLettersNumber = currLettersNumber;
+  			winner = pageCount;
+  		}
+  		if(stringCount == PAGE_LINE_NUMBER) {
+  			pageCount++;
+  			currLettersNumber = 0;
+  			stringCount = 0;
+  		}
   	}
-    fclose(fileHandler);
-  }
-  return(pageBuffer);
-}
-
-
-void printPage(char *page) {
-	int countLineEnding = 0, symbolIndex = 0;
-	char symbol = NULL;
-
-	printf("The biggest amount of letters %d on the %d page. \n", numberLetters, numberBigPage);
-	while(countLineEnding < PAGE_LINE_NUMBER) {
-		symbol = *(page + symbolIndex++);
-		printf("%c", symbol);
-		if (symbol == '\n') {
-			countLineEnding++;
+  	while((c = fgetc(stringBuffer)) != EOF) {
+  		currLettersNumber += getNumberLetters(c);
+  	}
+  	if(currLettersNumber > maxLettersNumber) {
+			maxLettersNumber = currLettersNumber;
+			winner = pageCount;
 		}
-	}
-}
-
-
-int main(void) {
-  char *pageContent = getBigPage("EngDict.txt");
-  if(pageContent == NULL) {
-  	printf("Failed openning file! \n");
-		return 1;
   }
   else {
-  	printPage(&pageContent);
-  	free(pageContent);
-		return 0;
+  	printf("Failed to open file with name: %s!", dictFilename);
+  	return;
   }
+  fclose(fileHandler);
+  free(stringBuffer);
+  printf("Winner page with serial number %d contains %d english symbols. \n", winner, maxLettersNumber);
+}
+
+int main(void) {
+
+	// initialization
+	printf("Enter filename for English Dictionary: \n");
+	scanf("%s", dictFilename);
+
+  if(dictFilename == NULL) {
+  	printf("Wrong name! \n");
+		return 1;
+  }
+
+  getBigestPage();
+	return 0;
 }
 
