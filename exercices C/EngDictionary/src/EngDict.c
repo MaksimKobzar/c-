@@ -20,8 +20,7 @@ int numberLetters = 0;
 char dictFilename[FILENAME_WIDTH];
 
 
-
-//------------------------------- MAIN FUNCTIONS ----------------------------------//
+//------------------------------- FUNCTIONS ----------------------------------//
 char isLetter(char symbol) {
 	if('a' <= symbol && symbol <= 'z') {
 		return 1;
@@ -31,9 +30,9 @@ char isLetter(char symbol) {
 
 int getNumberLetters(char *checkString) {
 	int numberLetters = 0, index = 0;
-	char c = NULL;
+	char c;
 
-	while((c = *(checkString + index++)) != "\n") {
+  while((c = checkString[index++]) != '\0') {
 		if(isLetter(c)) {
 			numberLetters++;
 		}
@@ -41,37 +40,31 @@ int getNumberLetters(char *checkString) {
 	return numberLetters;
 }
 
-void getBigestPage() {
+void getBiggestPage() {
   FILE *fileHandler = fopen(dictFilename, "r");
-  char *stringBuffer = (char*) malloc(sizeof(char) * (STRING_BUFFER_SIZE + 1));
-  char c = NULL;
+  char *stringBuffer = (char*) malloc(sizeof(char) * STRING_BUFFER_SIZE);
 	int winner = 0, pageCount = 0,
-			currLettersNumber = 0, maxLettersNumber = 0,
-			stringCount = 0, readedCount = 0;
+			currLettersNumber = 0, maxLettersNumber = 0, stringCount = 0;
 
   if (fileHandler) {
-  	while((readedCount = fgets(stringBuffer, STRING_BUFFER_SIZE, fileHandler)) != NULL) {
-  		if(readedCount != STRING_BUFFER_SIZE) {
-  			stringCount++;
-  		}
-  		currLettersNumber += getNumberLetters(&stringBuffer);
-  		if(currLettersNumber > maxLettersNumber) {
-  			maxLettersNumber = currLettersNumber;
-  			winner = pageCount;
-  		}
-  		if(stringCount == PAGE_LINE_NUMBER) {
+    printf("File is open.\n");
+    while((fgets(stringBuffer, STRING_BUFFER_SIZE, fileHandler)) != NULL) {
+  		
+      if(strlen(stringBuffer) != STRING_BUFFER_SIZE - 1) {
+        stringCount++;
+      }
+      currLettersNumber += getNumberLetters(stringBuffer);
+      if(currLettersNumber > maxLettersNumber) {
+        maxLettersNumber = currLettersNumber;
+        winner = pageCount;
+      }
+      if(stringCount == PAGE_LINE_NUMBER) {
+        printf("Letters in %d page - %d \n", pageCount, currLettersNumber);
   			pageCount++;
   			currLettersNumber = 0;
   			stringCount = 0;
   		}
   	}
-  	while((c = fgetc(stringBuffer)) != EOF) {
-  		currLettersNumber += getNumberLetters(c);
-  	}
-  	if(currLettersNumber > maxLettersNumber) {
-			maxLettersNumber = currLettersNumber;
-			winner = pageCount;
-		}
   }
   else {
   	printf("Failed to open file with name: %s!", dictFilename);
@@ -82,18 +75,23 @@ void getBigestPage() {
   printf("Winner page with serial number %d contains %d english symbols. \n", winner, maxLettersNumber);
 }
 
+
+
 int main(void) {
 
 	// initialization
 	printf("Enter filename for English Dictionary: \n");
 	scanf("%s", dictFilename);
 
+// !!!!!! Uncomment to check time 
+//strcpy(dictFilename, "EngDict.txt");
+  
   if(dictFilename == NULL) {
   	printf("Wrong name! \n");
 		return 1;
   }
 
-  getBigestPage();
+  getBiggestPage();
 	return 0;
 }
 
