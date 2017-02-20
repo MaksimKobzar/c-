@@ -1,0 +1,127 @@
+/*
+ * main.c
+ *
+ *  Created on: Feb 16, 2017
+ *      Author: karavanov
+ */
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define __BUFFSIZE__ 128
+// #define __DEBUG__ on
+#define __TESTFILE__ on
+
+
+// #ifdef __TESTFILE__
+
+// void createTestFile(FILE * fp) {
+
+// 	int letterCnt [5] = {1, 13, 2, 2, 5};
+// 	fp = fopen("test.txt", "w");
+
+// 	int i, j;
+// 	for (i = 0; i < 5; i++) {
+// 		for (j = 0; j < 50; j++) {
+// 			printf("%d",j);
+// 			if (j < letterCnt[i]) fprintf(fp, "a\n");
+// 			else fprintf(fp, "2\n");
+// 		}
+// 	}
+
+// 	fclose(fp);
+// }
+
+// #endif
+
+
+int main (int args, char * filename[]) {
+
+	FILE *fp;
+#ifdef __TESTFILE__
+	// createTestFile (fp);
+	fp = fopen("test.txt","r");
+#else
+	fp = fopen(filename[1],"r");
+#endif
+
+
+	if (fp == NULL) {
+		printf("Error open file");
+		return 0;
+	}
+
+	int currPageNumber = 0;
+	int pageNumber = 0;
+	char stringCnt = 0;
+	int maxLetter = 0;
+	int cntLetter = 0;
+
+	char *strstrResult;
+	// выделяем память буфера
+	char finish = 0;
+	char * buff = malloc(__BUFFSIZE__);
+	int i;
+
+	while (1) {
+
+#ifdef __DEBUG__
+		printf ("buff address = 0x%x\n", (unsigned int)buff);
+#endif
+		size_t symbolsRead = fread(buff, 1, __BUFFSIZE__, fp);
+#ifdef __DEBUG__
+		printf ("cnt symbols = %d\n", symbolsRead);
+#endif
+
+		// если считанный размер меньше, чем размер буфера
+		if (symbolsRead != __BUFFSIZE__) {
+			// если было считано мало и нет конца файла, тогда ошибка чтения файла
+			if (!feof(fp)) {
+				printf("Error file read\n");
+				return 0;
+			}
+			// если считано мало и конец файла тогда все ок
+			else finish = 1;
+		}
+		for (i = 0; i < symbolsRead; i++) {
+			printf("Print strstrResult before %d. \n", (unsigned int)strstrResult);
+			strstrResult = strstr(buff, "Alice");
+			printf("Print strstrResult after %d. \n", (unsigned int)strstrResult);
+			if (strstrResult != NULL) {
+				cntLetter++;
+				buff = strstrResult;
+			}
+			else if (*buff == 0x0A) {
+				stringCnt++;
+			}
+		}
+
+			if (stringCnt == 50) {
+				if (maxLetter < cntLetter) {
+					maxLetter = cntLetter;
+					pageNumber = currPageNumber;
+				}
+				currPageNumber++;
+#ifdef __DEBUG__
+			printf("%d\n\n", cntLetter);
+#endif
+				stringCnt = 0;
+				cntLetter = 0;
+			}
+			buff++;
+		if (finish) {
+			break;
+		}
+	}
+
+	printf("\nMax letter count on page = %d\n", maxLetter);
+	printf("Number page = %d\n\n", pageNumber);
+
+	fclose(fp);
+
+
+	return 0;
+}
