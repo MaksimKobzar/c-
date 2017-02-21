@@ -1,0 +1,3 @@
+/home/maksim/git/c-/c++_work_directory/CLion/HelloWorld/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/maksim/git/c-/c++_work_directory/CLion/HelloWorld/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/maksim/git/c-/c++_work_directory/CLion/HelloWorld/cmake-build-debug/CMakeFiles/HelloWorld.dir
