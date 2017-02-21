@@ -1,0 +1,61 @@
+02:51:52 **** Incremental Build of configuration Debug for project EngDict ****
+make all 
+Building file: ../src/EngDict.c
+Invoking: Cross GCC Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/EngDict.d" -MT"src/EngDict.d" -o "src/EngDict.o" "../src/EngDict.c"
+In file included from ../src/EngDict.c:10:0:
+../src/EngDict.c: In function ‘isLastPage’:
+../src/EngDict.c:27:6: error: incompatible type for argument 1 of ‘_IO_getc’
+   if(getc(*(fileHandler + handlerOffset + symbolIndex++)) == EOF) {
+      ^
+In file included from /usr/include/stdio.h:74:0,
+                 from ../src/EngDict.c:10:
+/usr/include/libio.h:429:12: note: expected ‘struct _IO_FILE *’ but argument is of type ‘FILE’
+ extern int _IO_getc (_IO_FILE *__fp);
+            ^
+../src/EngDict.c:30:58: error: invalid operands to binary == (have ‘FILE’ and ‘int’)
+   else if(*(fileHandler + handlerOffset + symbolIndex++) == '\n') {
+                                                          ^
+In file included from ../src/EngDict.c:10:0:
+../src/EngDict.c: In function ‘getNumberLetters’:
+../src/EngDict.c:49:12: error: incompatible type for argument 1 of ‘_IO_getc’
+   symbol = getc(*(fileHandler + handlerOffset + symbolIndex++));
+            ^
+In file included from /usr/include/stdio.h:74:0,
+                 from ../src/EngDict.c:10:
+/usr/include/libio.h:429:12: note: expected ‘struct _IO_FILE *’ but argument is of type ‘FILE’
+ extern int _IO_getc (_IO_FILE *__fp);
+src/subdir.mk:18: recipe for target 'src/EngDict.o' failed
+            ^
+../src/EngDict.c: At top level:
+../src/EngDict.c:63:1: warning: return type defaults to ‘int’ [-Wreturn-type]
+ getPageSize(FILE *fileHandler, int handlerOffset) {
+ ^
+In file included from ../src/EngDict.c:10:0:
+../src/EngDict.c: In function ‘getPageSize’:
+../src/EngDict.c:69:12: error: incompatible type for argument 1 of ‘_IO_getc’
+   symbol = getc(*(fileHandler + handlerOffset + symbolIndex++));
+            ^
+In file included from /usr/include/stdio.h:74:0,
+                 from ../src/EngDict.c:10:
+/usr/include/libio.h:429:12: note: expected ‘struct _IO_FILE *’ but argument is of type ‘FILE’
+ extern int _IO_getc (_IO_FILE *__fp);
+            ^
+../src/EngDict.c: In function ‘getBigPage’:
+../src/EngDict.c:116:46: warning: passing argument 3 of ‘copy2Buffer’ from incompatible pointer type
+      copy2Buffer(fileHandler, handlerOffset, &pageBuffer);
+                                              ^
+../src/EngDict.c:81:6: note: expected ‘char *’ but argument is of type ‘char **’
+ void copy2Buffer(FILE *fileHandler, int handlerOffset, char *pageBuffer) {
+      ^
+../src/EngDict.c: In function ‘main’:
+../src/EngDict.c:154:14: warning: passing argument 1 of ‘printPage’ from incompatible pointer type
+    printPage(&pageContent);
+              ^
+../src/EngDict.c:132:6: note: expected ‘char *’ but argument is of type ‘char **’
+ void printPage(char *page) {
+      ^
+make: *** [src/EngDict.o] Error 1
+
+02:51:52 Build Finished (took 71ms)
+

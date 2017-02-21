@@ -1,12 +1,19 @@
-00:41:14 **** Incremental Build of configuration Debug for project project_eiler_20 ****
+23:02:27 **** Incremental Build of configuration Debug for project Alice ****
 make all 
-Building file: ../src/project_eiler_20.c
+Building file: ../src/Alice.c
 Invoking: Cross GCC Compiler
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/project_eiler_20.d" -MT"src/project_eiler_20.d" -o "src/project_eiler_20.o" "../src/project_eiler_20.c"
-Finished building: ../src/project_eiler_20.c
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Alice.d" -MT"src/Alice.d" -o "src/Alice.o" "../src/Alice.c"
+../src/Alice.c: In function ‘main’:
+../src/Alice.c:90:47: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+Finished building: ../src/Alice.c
  
-Building target: project_eiler_20
+Building target: Alice
 Invoking: Cross GCC Linker
-gcc  -o "project_eiler_20"  ./src/project_eiler_20.o   
-Finished building target: project_eiler_20
+gcc  -o "Alice"  ./src/Alice.o   
+    printf("Print strstrResult before %d. \n", (unsigned int)strstrResult);
+                                               ^
+../src/Alice.c:92:46: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    printf("Print strstrResult after %d. \n", (unsigned int)strstrResult);
+                                              ^
+Finished building target: Alice
  

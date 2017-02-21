@@ -1,3 +1,0 @@
-C:\Users\Maksim\.CLion2016.3\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "\"E:/git/с-/c++ project\""
-CMake Error: The source directory "/cygdrive/e/git/Ñ�-/c++ project/cmake-build-debug/"/"E:/git/Ñ�-/c++ project/""" does not exist.
-Specify --help for usage, or press the help button on the CMake GUI.

@@ -1,0 +1,13 @@
+00:55:54 **** Incremental Build of configuration Debug for project mail2 ****
+make all 
+Building target: mail2
+Invoking: Cross GCC Linker
+gcc  -o "mail2"  ./src/mail2.o   
+./src/mail2.o: In function `getYCoord':
+/home/maksim/git/c-/exercices C/mail2/Debug/../src/mail2.c:21: undefined reference to `sqrt'
+collect2: error: ld returned 1 exit status
+makefile:30: recipe for target 'mail2' failed
+make: *** [mail2] Error 1
+
+00:55:54 Build Finished (took 75ms)
+
