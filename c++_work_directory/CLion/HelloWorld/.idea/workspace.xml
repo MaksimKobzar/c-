@@ -14,7 +14,6 @@
     <list default="true" id="20b669ee-96d9-4f6d-8266-473a4d6065d4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/HelloWorld" afterPath="$PROJECT_DIR$/cmake-build-debug/HelloWorld" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -343,12 +342,20 @@
       <option name="presentableId" value="Default" />
       <updated>1487710257174</updated>
       <workItem from="1487710260011" duration="1351000" />
-      <workItem from="1487797732310" duration="7126000" />
+      <workItem from="1487797732310" duration="7148000" />
     </task>
+    <task id="LOCAL-00001" summary="work with stepik org tests">
+      <created>1487806235778</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1487806235778</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8477000" />
+    <option name="totallyTimeSpent" value="8499000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -389,6 +396,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="work with stepik org tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="work with stepik org tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
