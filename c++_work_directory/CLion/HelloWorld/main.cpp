@@ -1,28 +1,35 @@
 #include <iostream>
-#include <string>
-using namespace std;
+#include <algorithm> // std::swap
+#include <cstddef>   // size_t
+#include <cstring>   // strlen, strcpy
+#include <stdio.h>
+#include <string.h>
 
-int main()
-{
-    std::string out = "\0";
-    int index = 0;
-    bool wasSpace = 0;
+struct String {
+    String(const char *str = "");
+    String(size_t n, char c);
+    String(const String &other);
+    ~String();
 
-    char c = '\0';
-
-    while (cin.get(c)) {
-
-        if ((index == 0) || !((c == ' ') && wasSpace)) {
-            out.push_back(c);
-            index++;
+    /* Реализуйте оператор присваивания */
+    String &operator=(const String &other) {
+        if(this != &other) {
+            delete [] str;
+            str = new char[other.size+1];
+            strcpy(str, other.str);
+            size = other.size;
         }
-
-        wasSpace = c == ' ';
-
-        if(c == '\0' || c == '\n')
-            break;
+        return *this;
     }
-    cout << std::out << "\n" << endl;
 
+    void append(const String &other);
+
+    size_t size;
+    char *str;
+};
+
+int main() {
+
+    String ;
     return 0;
-}
+};
